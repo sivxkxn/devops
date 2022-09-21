@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+#/ command: syvokon:yuliia: "syvokon"
+#/ usage: rerun syvokon:yuliia [options]
+#/ rerun-variables: RERUN, RERUN_VERSION, RERUN_MODULES, RERUN_MODULE_DIR
+#/ option-variables: 
+
+. "$RERUN_MODULE_DIR/lib/functions.sh" "yuliia" || { 
+  echo >&2 "Failed loading function library." ; exit 1 ; 
+}
+
+set -o errexit -o nounset -o pipefail
+
+rerun_options_parse "$@"
+
+# Command implementation
+# ----------------------
+
+CLEAR="\u001b[0m"
+COLOR_RED="\u001b[31m"
+COLOR_GREEN="\u001b[32m"
+
+env -0 | while IFS='=' read -r -d '' key val; do
+    printf "${COLOR_RED}%s${CLEAR}=${COLOR_GREEN}%s${CLEAR}\n" "$key" "$val"
+done
+
+# Done. Exit with last command exit status.
+exit $?
+
